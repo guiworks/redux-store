@@ -9,28 +9,45 @@ export class Store {
 
   constructor(reducers={}, initialState ={}) {
 
+
+    this.subscribers = [];
+
     //pega os dados do reducers do app.ts
     this.reducers = reducers;
-    this.state = initialState;
+
+    //dados já salvos
+    this.state = this.reduce(initialState, {});
   }
 
-  get value(){
+  get value() {
     return this.state;
+  }
+
+  subscribe(fn) {
+    this.subscribers = [...this.subscribers, fn];
+    this.notify();
+
+    return() => {
+      this.subscribers = this.subscribers.filter(sub => sub !== fn)
+    }
   }
 
   dispatch(action) {
     //todo/duvida de como os dados do this.reducers, que vem do app.ts, enntram na classe
     this.state = this.reduce(this.state, action);
+    this.notify();
   }
 
-  private reduce(state, action ){
+  private notify() {
+    this.subscribers.forEach(fn => fn(this.value))
+  }
+
+  private reduce(state, action) {
     const newState = {};
-    for(const prop in this.reducers){
+    for (const prop in this.reducers) {
       newState[prop] = this.reducers[prop](state[prop], action);
     }
     return newState;
-
-
   }
 
 }

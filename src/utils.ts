@@ -7,10 +7,11 @@ export function renderTodos(collection) {
   for (const item of collection) {
     todoList.innerHTML += `
     	<li>
-	      ${item.label}
-        <button type="button" data-todo='${JSON.stringify(item)}'>
+    	  <button type="button" data-todo='${JSON.stringify(item)}'>
           Delete
         </button>
+	      ${item.label}
+
       </li>
      `;
   }

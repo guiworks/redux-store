@@ -18,15 +18,12 @@ export function reducer(
   switch (action.type) {
     case ADD_TODO: {
 
-      console.log('old-data', state)
-
       //novos dados para inserção
       const todo = action.payload
 
       //é onde acontece o merge do initialState (dados que ja estavam salvos), com os novos dados da variavel
       // todo que vem do payload
       const data = [...state.data, todo];
-      console.log('data', data)
 
       return {
         ...state,
@@ -35,7 +32,14 @@ export function reducer(
     }
 
     case REMOVE_TODO:{
-      console.log("Remove_Todo")
+      const data = state.data.filter(
+        todo => todo.label !== action.payload.label
+      );
+
+      return{
+       ...state,
+        data
+      };
     }
   }
 
